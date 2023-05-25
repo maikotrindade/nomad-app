@@ -13,16 +13,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ProfileScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.tertiaryContainer
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
-            Text("ProfileScreen")
-        }
+        Text("ProfileScreen")
     }
 }

@@ -13,16 +13,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FlightsScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.inverseOnSurface
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
-            Text("FlightsScreen")
-        }
+        Text("FlightsScreen")
     }
 }
