@@ -15,6 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,6 +29,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.github.maikotrindade.nomadrewards.ui.base.BaseContent
+import io.github.maikotrindade.nomadrewards.ui.flow.profile.ProfileScreen
+import io.github.maikotrindade.nomadrewards.ui.flow.welcome.WelcomeScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -42,9 +48,25 @@ class MainActivity : ComponentActivity() {
         auth = Firebase.auth
 
         setContent {
-            val viewModel: MainViewModel = viewModel()
-            val helloWorld by viewModel.helloWorldState.collectAsState()
-            MainScreen(helloWorld)
+            setupNavigation()
+//            val viewModel: MainViewModel = viewModel()
+//            val helloWorld by viewModel.helloWorldState.collectAsState()
+//            MainScreen(helloWorld)
+        }
+    }
+
+    @Composable
+    fun setupNavigation(
+        modifier: Modifier = Modifier,
+        navController: NavHostController = rememberNavController(),
+    ) {
+        NavHost(
+            modifier = modifier,
+            navController = navController,
+            startDestination = "WelcomeScreen"
+        ) {
+            composable("WelcomeScreen") { WelcomeScreen() }
+            composable("ProfileScreen") { ProfileScreen() }
         }
     }
 
