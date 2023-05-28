@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,9 +30,9 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
     ) {
         users.forEach { user ->
             Column {
-                Text(text = "Name: " + user.name)
+                Text(text = "Name: " + user.name, color = MaterialTheme.colorScheme.onPrimary)
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(text = "Email: " + user.email)
+                Text(text = "Email: " + user.email, color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

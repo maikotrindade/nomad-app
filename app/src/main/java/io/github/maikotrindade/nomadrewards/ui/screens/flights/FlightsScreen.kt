@@ -3,6 +3,7 @@ package io.github.maikotrindade.nomadrewards.ui.screens.flights
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,6 @@ fun FlightsScreen(viewModel: FlightsViewModel) {
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Text("FlightsScreen")
+        Text("FlightsScreen", color = MaterialTheme.colorScheme.onPrimary)
     }
 }

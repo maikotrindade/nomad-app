@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -23,12 +24,19 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.github.maikotrindade.nomadrewards.R
+import io.github.maikotrindade.nomadrewards.model.toModel
+import io.github.maikotrindade.nomadrewards.network.UserService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-open class AuthenticationUI : ComponentActivity() {
+open class AuthenticationUI : ComponentActivity(), KoinComponent {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private val service: UserService by inject()
     val userState = MutableStateFlow<FirebaseUser?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +58,7 @@ open class AuthenticationUI : ComponentActivity() {
         updateUser(currentUser)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -67,9 +76,12 @@ open class AuthenticationUI : ComponentActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
+                if (task.isSuccessful && auth.currentUser != null) {
+                    val user = auth.currentUser!!
                     updateUser(user)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        service.upsertUser(user.toModel())
+                    }
                 } else {
                     updateUser(null)
                 }
@@ -100,12 +112,15 @@ open class AuthenticationUI : ComponentActivity() {
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Nomad")
+            Text(text = "Nomad", color = MaterialTheme.colorScheme.onPrimary)
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = { if (user == null) signIn() else signOut() }
             ) {
-                Text(if (user == null) "sign in" else "sign out")
+                Text(
+                    if (user == null) "sign in" else "sign out",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }

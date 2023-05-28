@@ -17,11 +17,12 @@ class UserServiceImpl : UserService {
             .build().create(UserService::class.java)
     }
 
-    override val user: StateFlow<FirebaseUser?>
-        get() = MutableStateFlow(null)
-
     override suspend fun getUsers(): List<User> {
         return client.getUsers()
+    }
+
+    override suspend fun upsertUser(user: User) {
+        client.upsertUser(user)
     }
 
     companion object {
