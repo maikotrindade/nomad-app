@@ -1,4 +1,4 @@
-package io.github.maikotrindade.nomadrewards.ui.flow.welcome
+package io.github.maikotrindade.nomadrewards.ui.screens.flights
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WelcomeScreen() {
+fun FlightsScreen(viewModel: FlightsViewModel) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Text("WelcomeScreen")
+        Text("FlightsScreen")
     }
 }

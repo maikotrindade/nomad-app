@@ -1,23 +1,20 @@
-package io.github.maikotrindade.nomadrewards.ui.flow.profile
+package io.github.maikotrindade.nomadrewards.ui.screens.wallet
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileScreen() {
+fun WalletScreen(viewModel: WalletViewModel) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Text("ProfileScreen")
+        Text("WalletScreen")
     }
 }

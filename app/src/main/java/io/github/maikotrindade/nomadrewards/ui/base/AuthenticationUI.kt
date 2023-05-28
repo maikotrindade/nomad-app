@@ -39,6 +39,7 @@ open class AuthenticationUI : ComponentActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, signOptions)
+        googleSignInClient.signOut()
         auth = Firebase.auth
         userState.value = auth.currentUser
     }
@@ -99,7 +100,7 @@ open class AuthenticationUI : ComponentActivity() {
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "✈️  Nomad Rewards")
+            Text(text = "Nomad")
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = { if (user == null) signIn() else signOut() }

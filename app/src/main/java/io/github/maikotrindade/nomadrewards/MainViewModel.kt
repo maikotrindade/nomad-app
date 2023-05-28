@@ -7,6 +7,4 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel : ViewModel() {
 
-    private val _helloWorldState = MutableStateFlow("Hello Android!")
-    val helloWorldState: StateFlow<String> = _helloWorldState.asStateFlow()
 }
