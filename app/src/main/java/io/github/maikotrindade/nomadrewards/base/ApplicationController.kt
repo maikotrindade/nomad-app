@@ -1,8 +1,8 @@
 package io.github.maikotrindade.nomadrewards.base
 
 import android.app.Application
-import io.github.maikotrindade.nomadrewards.network.UserService
-import io.github.maikotrindade.nomadrewards.network.UserServiceImpl
+import io.github.maikotrindade.nomadrewards.network.ApiService
+import io.github.maikotrindade.nomadrewards.network.ApiServiceImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -18,7 +18,7 @@ class ApplicationController : Application() {
             androidContext(this@ApplicationController)
             modules(
                 module {
-                    single<UserService> { UserServiceImpl() }
+                    single<ApiService> { ApiServiceImpl() }
                 }
             )
         }

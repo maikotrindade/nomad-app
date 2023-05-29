@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
-
     LaunchedEffect(Unit) {
         viewModel.fetchUsers()
     }
@@ -28,7 +27,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        users.forEach { user ->
+        users?.forEach { user ->
             Column {
                 Text(text = "Name: " + user.name, color = MaterialTheme.colorScheme.onPrimary)
                 Spacer(modifier = Modifier.height(12.dp))

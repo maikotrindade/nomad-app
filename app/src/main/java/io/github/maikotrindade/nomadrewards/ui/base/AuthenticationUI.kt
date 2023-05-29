@@ -25,7 +25,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.toModel
-import io.github.maikotrindade.nomadrewards.network.UserService
+import io.github.maikotrindade.nomadrewards.network.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val service: UserService by inject()
+    private val service: ApiService by inject()
     val userState = MutableStateFlow<FirebaseUser?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
