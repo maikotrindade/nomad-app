@@ -1,5 +1,6 @@
 package io.github.maikotrindade.nomadrewards.ui.screens.profile
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel) {
+fun ProfileScreen(viewModel: ProfileViewModel, showMessage: (String) -> Unit) {
     LaunchedEffect(Unit) {
         viewModel.fetchUsers()
+    }
+
+    val message by viewModel.showMessage.collectAsState()
+    LaunchedEffect(message) {
+        message?.let { showMessage(it) }
     }
 
     val users by viewModel.users.collectAsState()

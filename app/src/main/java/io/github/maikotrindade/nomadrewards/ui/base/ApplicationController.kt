@@ -1,4 +1,4 @@
-package io.github.maikotrindade.nomadrewards.base
+package io.github.maikotrindade.nomadrewards.ui.base
 
 import android.app.Application
 import io.github.maikotrindade.nomadrewards.network.ApiService
@@ -17,9 +17,7 @@ class ApplicationController : Application() {
 
             androidContext(this@ApplicationController)
             modules(
-                module {
-                    single<ApiService> { ApiServiceImpl() }
-                }
+                module { single<ApiService> { ApiServiceImpl() } }
             )
         }
     }
