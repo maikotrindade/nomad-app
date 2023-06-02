@@ -123,9 +123,9 @@ object NavigationManager : KoinComponent {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FooterItem("admin", navAdmin)
             FooterItem("profile", navProfile)
             FooterItem("wallet", navWallet)
+            FooterItem("admin", navAdmin)
         }
     }
 

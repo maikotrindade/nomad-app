@@ -16,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.Flight
+import java.text.SimpleDateFormat
 
 @Composable
 fun WelcomeScreen(viewModel: WelcomeViewModel, showMessage: (String) -> Unit) {
@@ -40,6 +42,19 @@ fun WelcomeScreen(viewModel: WelcomeViewModel, showMessage: (String) -> Unit) {
             val flights by viewModel.flights.collectAsState()
             flights?.let {
                 FlightsList(it, viewModel)
+            } ?: run {
+                Column(
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Button(
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        onClick = { viewModel.fetchFlights() }
+                    ) {
+                        Text("Reload")
+                    }
+                }
             }
         } else {
             Column(
@@ -65,7 +80,7 @@ private fun TopContent() {
                 painter = painterResource(id = R.drawable.ic_departure),
                 contentDescription = null
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "YYC",
                 color = colorScheme.onPrimary,
@@ -82,7 +97,7 @@ private fun TopContent() {
                 painter = painterResource(id = R.drawable.ic_arrival),
                 contentDescription = null
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "SEA",
                 color = colorScheme.onPrimary,
@@ -113,26 +128,65 @@ private fun FlightsList(flights: List<Flight>, viewModel: WelcomeViewModel) {
                     .padding(horizontal = 12.dp)
                     .background(colorScheme.background, shape = RoundedCornerShape(12.dp))
                     .border(2.dp, SolidColor(Color.DarkGray), shape = RoundedCornerShape(12.dp))
+                    .padding(horizontal = 20.dp)
             ) {
-                Text(
-                    text = "flightNumber: " + flight.info.number,
-                    color = colorScheme.onPrimary
-                )
-                Text(
-                    text = "airline: " + flight.airline,
-                    color = colorScheme.onPrimary
-                )
-                Text(
-                    text = "departureAirport: " + flight.departure.airport,
-                    color = colorScheme.onPrimary
-                )
-                Text(
-                    text = "arrivalAirport: " + flight.arrival.airport,
-                    color = colorScheme.onPrimary
-                )
+                Row(
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Flight number",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.info.number,
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Airline",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.airline.name,
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Schedule Departure",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.departure.scheduled.formatFlightDate(),
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Schedule Arrival",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.arrival.scheduled.formatFlightDate(),
+                        color = colorScheme.onPrimary
+                    )
+                }
                 Button(
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(vertical = 20.dp)
                         .fillMaxWidth(),
                     onClick = { viewModel.onBuyTicket(flight) }
                 ) {
@@ -172,4 +226,12 @@ fun LoadingAnimation(
                 shape = CircleShape
             )
     )
+}
+
+@Composable
+private fun String.formatFlightDate(): String {
+    val configuration = LocalConfiguration.current
+    val locale = configuration.locales.get(0)
+    val parsedDate = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", locale).parse(this)
+    return SimpleDateFormat("dd MMM hh:mm", locale).format(parsedDate)
 }

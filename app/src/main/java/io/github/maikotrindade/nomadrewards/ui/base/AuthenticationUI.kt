@@ -7,11 +7,13 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -108,18 +110,24 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(MaterialTheme.colorScheme.background)
+                .background(colorScheme.background)
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Nomad", color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Nomad", color = colorScheme.onPrimary)
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = { if (user == null) signIn() else signOut() }
             ) {
                 Text(
-                    if (user == null) "sign in" else "sign out",
-                    color = MaterialTheme.colorScheme.onPrimary
+                    if (user == null) "Sign in" else "Sign out",
+                    color = colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    painterResource(if (user == null) R.drawable.ic_login else R.drawable.ic_logout),
+                    tint = colorScheme.onPrimary,
+                    contentDescription = null
                 )
             }
         }

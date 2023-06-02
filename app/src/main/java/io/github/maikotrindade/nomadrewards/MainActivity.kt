@@ -79,7 +79,7 @@ class MainActivity : AuthenticationUI() {
             ) {
                 Text(
                     text = message,
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onSecondary,
                 )
             }
         }
