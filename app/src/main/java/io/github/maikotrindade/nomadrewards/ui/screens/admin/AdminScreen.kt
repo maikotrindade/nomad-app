@@ -1,7 +1,9 @@
 package io.github.maikotrindade.nomadrewards.ui.screens.admin
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +18,10 @@ fun AdminScreen(viewModel: AdminViewModel) {
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Text("AdminScreen", color = MaterialTheme.colorScheme.onPrimary)
+
+        Text("Admin", color = MaterialTheme.colorScheme.onPrimary)
+        Spacer(modifier = Modifier.height(8.dp))
+
     }
 }
+
