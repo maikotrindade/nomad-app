@@ -15,15 +15,15 @@ class ProfileViewModel() : ViewModel(), KoinComponent {
 
     private val service: ApiService by inject()
 
-    private val _users = MutableStateFlow<List<User>?>(mutableListOf())
-    val users = _users.asStateFlow()
+    private val _user = MutableStateFlow<User?>(null)
+    val user = _user.asStateFlow()
 
     private val _showMessage = MutableStateFlow<String?>(null)
     val showMessage = _showMessage.asStateFlow()
 
-    fun fetchUsers() = viewModelScope.launch {
-        _users.value = performRequest(
-            request = { service.getUsers() },
+    fun fetchUserByEmail(email : String) = viewModelScope.launch {
+        _user.value = performRequest(
+            request = { service.getUserByEmail(email) },
             onError = {
                 _showMessage.value = it
             }

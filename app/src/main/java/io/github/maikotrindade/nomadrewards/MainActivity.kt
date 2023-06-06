@@ -1,7 +1,6 @@
 package io.github.maikotrindade.nomadrewards
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -33,10 +32,9 @@ class MainActivity : AuthenticationUI() {
             SetupNavigation(
                 header = { AuthHeader(userState.collectAsState().value) },
                 activity = this,
+                user = userState.collectAsState().value,
                 floating = {
-                    Log.d("MainActivity","floating")
                     snackBarMessage.collectAsState().value?.let {
-                        Log.d("MainActivity","before Toast")
                         Toast(it)
                     }
                 },
@@ -46,7 +44,6 @@ class MainActivity : AuthenticationUI() {
 
     fun showMessage(message: String) {
         snackBarMessage.value = message
-        Log.d("MainActivity","showSnackBar")
     }
 
     @Composable

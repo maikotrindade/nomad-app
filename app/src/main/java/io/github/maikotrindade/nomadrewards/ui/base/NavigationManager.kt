@@ -1,8 +1,16 @@
 package io.github.maikotrindade.nomadrewards.ui.base
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -19,14 +27,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseUser
 import io.github.maikotrindade.nomadrewards.MainActivity
 import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.ui.screens.admin.AdminScreen
 import io.github.maikotrindade.nomadrewards.ui.screens.admin.AdminViewModel
 import io.github.maikotrindade.nomadrewards.ui.screens.profile.ProfileScreen
 import io.github.maikotrindade.nomadrewards.ui.screens.profile.ProfileViewModel
-import io.github.maikotrindade.nomadrewards.ui.screens.wallet.WalletScreen
-import io.github.maikotrindade.nomadrewards.ui.screens.wallet.WalletViewModel
 import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeScreen
 import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeViewModel
 import io.github.maikotrindade.nomadrewards.ui.theme.NomadRewardsTheme
@@ -39,17 +46,20 @@ object NavigationManager : KoinComponent {
         header: @Composable () -> Unit,
         activity: MainActivity,
         floating: @Composable () -> Unit,
-        navController: NavHostController = rememberNavController()
+        user: FirebaseUser?,
+        navController: NavHostController = rememberNavController(),
     ) {
         ScreenContent(
             header = { header() },
-            content = { NavigationBody(activity, navController) },
+            content = { NavigationBody(activity, user, navController) },
             footer = {
-                Footer(
-                    navAdmin = { navController.navigate("AdminScreen") },
-                    navProfile = { navController.navigate("ProfileScreen") },
-                    navWallet = { navController.navigate("WalletScreen") }
-                )
+                if (user != null) {
+                    Footer(
+                        navHome = { navController.navigate("WelcomeScreen") },
+                        navAdmin = { navController.navigate("AdminScreen") },
+                        navProfile = { navController.navigate("ProfileScreen") },
+                    )
+                }
             },
             floating = { floating() },
         )
@@ -82,6 +92,7 @@ object NavigationManager : KoinComponent {
     @Composable
     private fun NavigationBody(
         activity: MainActivity,
+        user: FirebaseUser?,
         navController: NavHostController
     ) {
         NavHost(
@@ -98,22 +109,22 @@ object NavigationManager : KoinComponent {
                 AdminScreen(ViewModelProvider(activity)[AdminViewModel::class.java])
             }
             composable("ProfileScreen") {
-                ProfileScreen(
-                    viewModel = ViewModelProvider(activity)[ProfileViewModel::class.java],
-                    showMessage = { message: String -> activity.showMessage(message) }
-                )
-            }
-            composable("WalletScreen") {
-                WalletScreen(ViewModelProvider(activity)[WalletViewModel::class.java])
+                user?.email?.let {
+                    ProfileScreen(
+                        viewModel = ViewModelProvider(activity)[ProfileViewModel::class.java],
+                        userEmail = it,
+                        showMessage = { message: String -> activity.showMessage(message) }
+                    )
+                }
             }
         }
     }
 
     @Composable
     private fun Footer(
+        navHome: () -> Unit,
         navAdmin: () -> Unit,
         navProfile: () -> Unit,
-        navWallet: () -> Unit,
     ) {
         Divider(color = colorScheme.onPrimary, thickness = 1.dp)
         Row(
@@ -123,14 +134,18 @@ object NavigationManager : KoinComponent {
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FooterItem("profile", navProfile)
-            FooterItem("wallet", navWallet)
-            FooterItem("admin", navAdmin)
+            FooterItem("Home", R.drawable.ic_home, navHome)
+            FooterItem("Admin", R.drawable.ic_admin, navAdmin)
+            FooterItem("Profile", R.drawable.ic_profile, navProfile)
         }
     }
 
     @Composable
-    private fun RowScope.FooterItem(title: String, action: () -> Unit) {
+    private fun RowScope.FooterItem(
+        title: String,
+        @DrawableRes iconRes: Int,
+        action: () -> Unit
+    ) {
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -138,7 +153,7 @@ object NavigationManager : KoinComponent {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_profile),
+                painter = painterResource(iconRes),
                 tint = colorScheme.onPrimary,
                 contentDescription = null
             )
@@ -148,7 +163,7 @@ object NavigationManager : KoinComponent {
                 text = title,
                 color = colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
-                fontSize = 14.sp
+                fontSize = 12.sp
             )
         }
     }
