@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.maikotrindade.nomadrewards.R
@@ -165,7 +166,24 @@ private fun FlightsList(flights: List<Flight>, viewModel: WelcomeViewModel) {
                     )
                     Text(
                         text = flight.info.number,
+                        color = colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Status",
                         color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.flightStatus,
+                        color = colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 Row(
