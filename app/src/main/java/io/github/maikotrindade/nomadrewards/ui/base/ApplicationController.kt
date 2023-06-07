@@ -17,7 +17,8 @@ class ApplicationController : Application() {
 
             androidContext(this@ApplicationController)
             modules(
-                module { single<ApiService> { ApiServiceImpl() } }
+                module { single<ApiService> { ApiServiceImpl() } },
+                module { single { UserManager() } }
             )
         }
     }

@@ -7,7 +7,7 @@ object NetworkUtils {
 
     suspend fun <T> performRequest(
         request: suspend () -> Response<T>,
-        onError: (String) -> Unit,
+        onError: (String) -> Unit = {},
     ): T? {
         return try {
             val response = request()

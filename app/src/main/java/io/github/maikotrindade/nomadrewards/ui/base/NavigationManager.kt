@@ -38,22 +38,24 @@ import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeScreen
 import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeViewModel
 import io.github.maikotrindade.nomadrewards.ui.theme.NomadRewardsTheme
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 object NavigationManager : KoinComponent {
+
+    private val userManager: UserManager by inject()
 
     @Composable
     fun SetupNavigation(
         header: @Composable () -> Unit,
         activity: MainActivity,
         floating: @Composable () -> Unit,
-        user: FirebaseUser?,
         navController: NavHostController = rememberNavController(),
     ) {
         ScreenContent(
             header = { header() },
-            content = { NavigationBody(activity, user, navController) },
+            content = { NavigationBody(activity, userManager.user, navController) },
             footer = {
-                if (user != null) {
+                if (userManager.user != null) {
                     Footer(
                         navHome = { navController.navigate("WelcomeScreen") },
                         navAdmin = { navController.navigate("AdminScreen") },

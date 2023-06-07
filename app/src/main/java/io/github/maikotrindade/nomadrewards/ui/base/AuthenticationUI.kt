@@ -29,7 +29,6 @@ import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.toModel
 import io.github.maikotrindade.nomadrewards.network.ApiService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -39,7 +38,7 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
     private val service: ApiService by inject()
-    val userState = MutableStateFlow<FirebaseUser?>(null)
+    private val userManager: UserManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +50,7 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
         googleSignInClient = GoogleSignIn.getClient(this, signOptions)
         googleSignInClient.signOut()
         auth = Firebase.auth
-        userState.value = auth.currentUser
+        userManager.user = auth.currentUser
     }
 
     override fun onStart() {
@@ -97,15 +96,15 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
 
     private fun signOut() {
         Firebase.auth.signOut()
-        userState.value = null
+        userManager.user = null
     }
 
     private fun updateUser(user: FirebaseUser?) {
-        userState.value = user
+        userManager.user = user
     }
 
     @Composable
-    internal fun AuthHeader(user: FirebaseUser?) {
+    internal fun AuthHeader() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,15 +116,15 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
             Text(text = "Nomad", color = colorScheme.onPrimary)
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { if (user == null) signIn() else signOut() }
+                onClick = { if (userManager.user == null) signIn() else signOut() }
             ) {
                 Text(
-                    if (user == null) "Sign in" else "Sign out",
+                    if (userManager.user == null) "Sign in" else "Sign out",
                     color = colorScheme.onPrimary
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    painterResource(if (user == null) R.drawable.ic_login else R.drawable.ic_logout),
+                    painterResource(if (userManager.user == null) R.drawable.ic_login else R.drawable.ic_logout),
                     tint = colorScheme.onPrimary,
                     contentDescription = null
                 )

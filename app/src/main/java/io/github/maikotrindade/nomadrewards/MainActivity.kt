@@ -30,9 +30,8 @@ class MainActivity : AuthenticationUI() {
         super.onCreate(savedInstanceState)
         setContent {
             SetupNavigation(
-                header = { AuthHeader(userState.collectAsState().value) },
+                header = { AuthHeader() },
                 activity = this,
-                user = userState.collectAsState().value,
                 floating = {
                     snackBarMessage.collectAsState().value?.let {
                         Toast(it)

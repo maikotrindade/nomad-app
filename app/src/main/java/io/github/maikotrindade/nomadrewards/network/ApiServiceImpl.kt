@@ -1,6 +1,8 @@
 package io.github.maikotrindade.nomadrewards.network
 
+import io.github.maikotrindade.nomadrewards.model.CreateFlightRequest
 import io.github.maikotrindade.nomadrewards.model.Flight
+import io.github.maikotrindade.nomadrewards.model.UpdateFlightStatus
 import io.github.maikotrindade.nomadrewards.model.User
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,8 +41,12 @@ class ApiServiceImpl : ApiService {
         getClient().upsertUser(user)
     }
 
-    override suspend fun createFlight(id: String) {
-        getClient().createFlight(id)
+    override suspend fun createFlight(request: CreateFlightRequest) {
+        getClient().createFlight(request)
+    }
+
+    override suspend fun updateFlightStatus(request: UpdateFlightStatus) {
+        getClient().updateFlightStatus(request)
     }
 
     override suspend fun getFlights(): Response<List<Flight>> {
