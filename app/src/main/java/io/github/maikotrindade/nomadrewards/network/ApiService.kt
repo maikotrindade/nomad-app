@@ -27,5 +27,7 @@ interface ApiService {
     @POST("reward/flightstatus")
     suspend fun updateFlightStatus(@Body request: UpdateFlightStatus)
 
+    @POST("reward")
+    suspend fun runRewardsProcess()
 
 }

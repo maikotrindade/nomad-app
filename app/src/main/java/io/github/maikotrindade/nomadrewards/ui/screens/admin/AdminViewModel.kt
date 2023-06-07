@@ -41,4 +41,8 @@ class AdminViewModel : ViewModel(), KoinComponent {
         )
         _isLoading.value = false
     }
+
+    fun runRewardsProcess() = viewModelScope.launch {
+        service.runRewardsProcess()
+    }
 }

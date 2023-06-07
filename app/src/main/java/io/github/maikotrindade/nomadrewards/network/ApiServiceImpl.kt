@@ -49,6 +49,10 @@ class ApiServiceImpl : ApiService {
         getClient().updateFlightStatus(request)
     }
 
+    override suspend fun runRewardsProcess() {
+        getClient().runRewardsProcess()
+    }
+
     override suspend fun getFlights(): Response<List<Flight>> {
         return getClient().getFlights()
     }

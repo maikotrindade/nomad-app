@@ -9,14 +9,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -80,52 +81,83 @@ fun AdminScreen(viewModel: AdminViewModel) {
 
 @Composable
 private fun FlightsList(flights: List<Flight>, viewModel: AdminViewModel) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-    ) {
+    LazyColumn(Modifier.fillMaxWidth()) {
+        item {
+            TopContent(viewModel)
+            Spacer(modifier = Modifier.height(32.dp))
+        }
         flights.forEach { flight ->
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .padding(horizontal = 12.dp)
-                    .background(
-                        MaterialTheme.colorScheme.background,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .border(2.dp, SolidColor(Color.DarkGray), shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(top = 20.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Flight number",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Text(
-                        text = flight.info.number,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-                Button(
-                    modifier = Modifier
-                        .padding(vertical = 20.dp)
-                        .fillMaxWidth(),
-                    onClick = { viewModel.onUpdateFlightStatus(flight) }
-                ) {
-                    Text(
-                        "Update Status to ACTIVE",
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        fontSize = 16.sp
-                    )
-                }
+            item {
+                FlightItem(flight, viewModel)
             }
+        }
+    }
+}
+
+@Composable
+private fun TopContent(viewModel: AdminViewModel) {
+    Column(Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Run Rewards On-chain",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 16.sp
+            )
+            Button(
+                modifier = Modifier.padding(start = 4.dp),
+                onClick = { viewModel.runRewardsProcess() }
+            ) {
+                Text(
+                    "Start",
+                    fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FlightItem(flight: Flight, viewModel: AdminViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp)
+            .padding(horizontal = 12.dp)
+            .background(
+                MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .border(2.dp, SolidColor(Color.DarkGray), shape = RoundedCornerShape(12.dp))
+            .padding(horizontal = 20.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Flight number",
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Text(
+                text = flight.info.number,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+        Button(
+            modifier = Modifier
+                .padding(vertical = 20.dp)
+                .fillMaxWidth(),
+            onClick = { viewModel.onUpdateFlightStatus(flight) }
+        ) {
+            Text(
+                "Update Status to ACTIVE",
+                fontSize = 16.sp
+            )
         }
     }
 }
