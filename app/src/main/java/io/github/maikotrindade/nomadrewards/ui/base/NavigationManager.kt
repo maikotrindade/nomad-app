@@ -53,7 +53,7 @@ object NavigationManager : KoinComponent {
     ) {
         ScreenContent(
             header = { header() },
-            content = { NavigationBody(activity, userManager.user, navController) },
+            content = { NavigationBody(activity, navController) },
             footer = {
                 if (userManager.user != null) {
                     Footer(
@@ -94,7 +94,6 @@ object NavigationManager : KoinComponent {
     @Composable
     private fun NavigationBody(
         activity: MainActivity,
-        user: FirebaseUser?,
         navController: NavHostController
     ) {
         NavHost(
@@ -111,13 +110,10 @@ object NavigationManager : KoinComponent {
                 AdminScreen(ViewModelProvider(activity)[AdminViewModel::class.java])
             }
             composable("ProfileScreen") {
-                user?.email?.let {
-                    ProfileScreen(
-                        viewModel = ViewModelProvider(activity)[ProfileViewModel::class.java],
-                        userEmail = it,
-                        showMessage = { message: String -> activity.showMessage(message) }
-                    )
-                }
+                ProfileScreen(
+                    viewModel = ViewModelProvider(activity)[ProfileViewModel::class.java],
+                    showMessage = { message: String -> activity.showMessage(message) }
+                )
             }
         }
     }
