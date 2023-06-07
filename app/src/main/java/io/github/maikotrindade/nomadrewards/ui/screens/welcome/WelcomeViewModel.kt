@@ -38,7 +38,7 @@ class WelcomeViewModel : ViewModel(), KoinComponent {
     }
 
     fun onBuyTicket(flight: Flight) = viewModelScope.launch {
-        userManager.user?.email?.let { email ->
+        userManager.user.value?.email?.let { email ->
             _isLoading.value = true
             service.createFlight(
                 CreateFlightRequest(flight.info.number, email)

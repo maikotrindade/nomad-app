@@ -27,7 +27,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
     val showMessage = _showMessage.asStateFlow()
 
     fun fetchUserByEmail() = viewModelScope.launch {
-        userManager.user?.email?.let { email ->
+        userManager.user.value?.email?.let { email ->
             _user.value = performRequest(
                 request = { service.getUserByEmail(email) },
                 onError = {

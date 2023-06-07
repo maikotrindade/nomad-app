@@ -11,6 +11,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,6 +31,8 @@ import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.toModel
 import io.github.maikotrindade.nomadrewards.network.ApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -40,6 +44,8 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
     private val service: ApiService by inject()
     private val userManager: UserManager by inject()
 
+    private val userState = userManager.user.asStateFlow()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -50,7 +56,7 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
         googleSignInClient = GoogleSignIn.getClient(this, signOptions)
         googleSignInClient.signOut()
         auth = Firebase.auth
-        userManager.user = auth.currentUser
+        userManager.user.value = auth.currentUser
     }
 
     override fun onStart() {
@@ -96,15 +102,16 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
 
     private fun signOut() {
         Firebase.auth.signOut()
-        userManager.user = null
+        userManager.user.value = null
     }
 
     private fun updateUser(user: FirebaseUser?) {
-        userManager.user = user
+        userManager.user.value = user
     }
 
     @Composable
     internal fun AuthHeader() {
+        val user by userState.collectAsState()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,15 +123,15 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
             Text(text = "Nomad", color = colorScheme.onPrimary)
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = { if (userManager.user == null) signIn() else signOut() }
+                onClick = { if (user == null) signIn() else signOut() }
             ) {
                 Text(
-                    if (userManager.user == null) "Sign in" else "Sign out",
+                    if (user == null) "Sign in" else "Sign out",
                     color = colorScheme.onPrimary
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
-                    painterResource(if (userManager.user == null) R.drawable.ic_login else R.drawable.ic_logout),
+                    painterResource(if (user == null) R.drawable.ic_login else R.drawable.ic_logout),
                     tint = colorScheme.onPrimary,
                     contentDescription = null
                 )

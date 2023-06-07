@@ -84,7 +84,7 @@ private fun FlightsList(flights: List<Flight>, viewModel: AdminViewModel) {
     LazyColumn(Modifier.fillMaxWidth()) {
         item {
             TopContent(viewModel)
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
         flights.forEach { flight ->
             item {
@@ -96,22 +96,23 @@ private fun FlightsList(flights: List<Flight>, viewModel: AdminViewModel) {
 
 @Composable
 private fun TopContent(viewModel: AdminViewModel) {
-    Column(Modifier.padding(top = 20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "Run Rewards On-chain",
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 16.sp
+                fontSize = 18.sp
             )
             Button(
                 modifier = Modifier.padding(start = 4.dp),
                 onClick = { viewModel.runRewardsProcess() }
             ) {
                 Text(
-                    "Start",
+                    "Start →",
                     fontSize = 14.sp
                 )
             }

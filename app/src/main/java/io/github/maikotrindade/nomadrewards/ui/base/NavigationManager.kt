@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -37,12 +39,14 @@ import io.github.maikotrindade.nomadrewards.ui.screens.profile.ProfileViewModel
 import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeScreen
 import io.github.maikotrindade.nomadrewards.ui.screens.welcome.WelcomeViewModel
 import io.github.maikotrindade.nomadrewards.ui.theme.NomadRewardsTheme
+import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object NavigationManager : KoinComponent {
 
     private val userManager: UserManager by inject()
+    private val userState = userManager.user.asStateFlow()
 
     @Composable
     fun SetupNavigation(
@@ -51,11 +55,12 @@ object NavigationManager : KoinComponent {
         floating: @Composable () -> Unit,
         navController: NavHostController = rememberNavController(),
     ) {
+        val user by userState.collectAsState()
         ScreenContent(
             header = { header() },
             content = { NavigationBody(activity, navController) },
             footer = {
-                if (userManager.user != null) {
+                if (user != null) {
                     Footer(
                         navHome = { navController.navigate("WelcomeScreen") },
                         navAdmin = { navController.navigate("AdminScreen") },
