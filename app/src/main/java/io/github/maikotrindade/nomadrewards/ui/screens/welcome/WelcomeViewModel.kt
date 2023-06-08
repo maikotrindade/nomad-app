@@ -41,7 +41,7 @@ class WelcomeViewModel : ViewModel(), KoinComponent {
     fun onBuyTicket(flight: Flight) = viewModelScope.launch {
         userManager.user.value?.email?.let { email ->
             _isLoading.value = true
-            performRequestPost(
+            val isSuccess = performRequestPost(
                 request = {
                     service.createFlight(
                         CreateFlightRequest(flight.info.number, email)
@@ -51,6 +51,9 @@ class WelcomeViewModel : ViewModel(), KoinComponent {
                     _showMessage.value = it
                 }
             )
+            if (isSuccess) {
+                _showMessage.value = "Yay! you got a flight ticket!"
+            }
             _isLoading.value = false
         }
     }

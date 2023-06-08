@@ -13,12 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.maikotrindade.nomadrewards.ui.base.AuthenticationUI
 import io.github.maikotrindade.nomadrewards.ui.base.NavigationManager.SetupNavigation
+import io.github.maikotrindade.nomadrewards.ui.theme.BgMessage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -70,7 +77,7 @@ class MainActivity : AuthenticationUI() {
                         color = MaterialTheme.colorScheme.onPrimary,
                         shape = RoundedCornerShape(6.dp)
                     )
-                    .background(MaterialTheme.colorScheme.error.copy(alpha = opacity.value)),
+                    .background(BgMessage.copy(alpha = opacity.value)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
