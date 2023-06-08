@@ -61,24 +61,13 @@ fun WelcomeScreen(viewModel: WelcomeViewModel, showMessage: (String) -> Unit) {
         if (!isLoading) {
             val flights by viewModel.flights.collectAsState()
             flights?.let {
-                FlightsList(it, viewModel)
-            } ?: run {
-                Column(
-                    Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Button(
-                        modifier = Modifier.padding(vertical = 24.dp),
-                        onClick = { viewModel.fetchFlights() }
-                    ) {
-                        Text(
-                            "Reload",
-                            color = colorScheme.onPrimary,
-                            fontSize = 18.sp
-                        )
-                    }
+                if (it.isNotEmpty()) {
+                    FlightsList(it, viewModel)
+                } else {
+                    NoFlightsContent()
                 }
+            } ?: run {
+                ReloadContent(viewModel)
             }
         } else {
             Column(
@@ -88,6 +77,41 @@ fun WelcomeScreen(viewModel: WelcomeViewModel, showMessage: (String) -> Unit) {
             ) {
                 LoadingAnimation()
             }
+        }
+    }
+}
+
+@Composable
+private fun NoFlightsContent() {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            "No Flights available",
+            color = colorScheme.onPrimary,
+            fontSize = 18.sp
+        )
+    }
+}
+
+@Composable
+private fun ReloadContent(viewModel: WelcomeViewModel) {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Button(
+            modifier = Modifier.padding(vertical = 24.dp),
+            onClick = { viewModel.fetchFlights() }
+        ) {
+            Text(
+                "Reload",
+                color = colorScheme.onPrimary,
+                fontSize = 18.sp
+            )
         }
     }
 }

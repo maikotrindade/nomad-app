@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,26 +46,16 @@ fun AdminScreen(viewModel: AdminViewModel) {
     Column(Modifier.fillMaxSize()) {
         val isLoading by viewModel.isLoading.collectAsState()
         if (!isLoading) {
+            TopContent(viewModel)
             val flights by viewModel.flights.collectAsState()
             flights?.let {
-                FlightsList(it, viewModel)
-            } ?: run {
-                Column(
-                    Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Button(
-                        modifier = Modifier.padding(vertical = 24.dp),
-                        onClick = { viewModel.fetchFlights() }
-                    ) {
-                        Text(
-                            "Reload",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 18.sp
-                        )
-                    }
+                if (it.isNotEmpty()) {
+                    FlightsList(it, viewModel)
+                } else {
+                    NoFlightsContent()
                 }
+            } ?: run {
+                ReloadContent(viewModel)
             }
         } else {
             Column(
@@ -81,10 +70,44 @@ fun AdminScreen(viewModel: AdminViewModel) {
 }
 
 @Composable
+private fun NoFlightsContent() {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            "No Flights available",
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontSize = 18.sp
+        )
+    }
+}
+
+@Composable
+private fun ReloadContent(viewModel: AdminViewModel) {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Button(
+            modifier = Modifier.padding(vertical = 24.dp),
+            onClick = { viewModel.fetchFlights() }
+        ) {
+            Text(
+                "Reload",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 18.sp
+            )
+        }
+    }
+}
+
+@Composable
 private fun FlightsList(flights: List<Flight>, viewModel: AdminViewModel) {
     LazyColumn(Modifier.fillMaxWidth()) {
         item {
-            TopContent(viewModel)
             Spacer(modifier = Modifier.height(12.dp))
         }
         flights.forEach { flight ->
@@ -104,36 +127,13 @@ private fun TopContent(viewModel: AdminViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Run Rewards On-chain",
+                text = "Trigger BE to force update all statuses to ACTIVE",
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp
+                fontSize = 14.sp
             )
             Button(
                 modifier = Modifier.padding(start = 4.dp),
-                onClick = { viewModel.runRewardsProcess() }
-            ) {
-                Text(
-                    "Start",
-                    fontSize = 14.sp
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Trigger Flight Status verifier",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp
-            )
-            Button(
-                modifier = Modifier.padding(start = 4.dp),
-                onClick = { viewModel.runRewardsProcess() }
+                onClick = { viewModel.runForceFlightStatusActive() }
             ) {
                 Text(
                     "Run",
@@ -141,18 +141,37 @@ private fun TopContent(viewModel: AdminViewModel) {
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(12.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Force flights to ACTIVE",
+                text = "Trigger BE to check Flight status via API",
                 color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 18.sp
+                fontSize = 14.sp
+            )
+            Button(
+                modifier = Modifier.padding(start = 4.dp),
+                onClick = { viewModel.runFlightStatusViaAPI() }
+            ) {
+                Text(
+                    "Run",
+                    fontSize = 14.sp
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Run Rewards Process ⛓️",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 14.sp
             )
             Button(
                 modifier = Modifier.padding(start = 4.dp),

@@ -30,4 +30,10 @@ interface ApiService {
     @POST("reward")
     suspend fun runRewardsProcess(): Response<Unit>
 
+    @POST("admin/flights")
+    suspend fun runFlightStatusViaAPI(): Response<Unit>
+
+    @POST("admin/forcestatus")
+    suspend fun runForceFlightStatusActive(): Response<Unit>
+
 }
