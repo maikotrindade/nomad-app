@@ -37,20 +37,20 @@ class ApiServiceImpl : ApiService {
         return getClient().getUserByEmail(email)
     }
 
-    override suspend fun upsertUser(user: User) {
-        getClient().upsertUser(user)
+    override suspend fun upsertUser(user: User): Response<Unit> {
+        return getClient().upsertUser(user)
     }
 
-    override suspend fun createFlight(request: CreateFlightRequest) {
-        getClient().createFlight(request)
+    override suspend fun createFlight(request: CreateFlightRequest): Response<Unit> {
+        return getClient().createFlight(request)
     }
 
-    override suspend fun updateFlightStatus(request: UpdateFlightStatus) {
-        getClient().updateFlightStatus(request)
+    override suspend fun updateFlightStatus(request: UpdateFlightStatus): Response<Unit> {
+        return getClient().updateFlightStatus(request)
     }
 
-    override suspend fun runRewardsProcess() {
-        getClient().runRewardsProcess()
+    override suspend fun runRewardsProcess(): Response<Unit> {
+        return getClient().runRewardsProcess()
     }
 
     override suspend fun getFlights(): Response<List<Flight>> {

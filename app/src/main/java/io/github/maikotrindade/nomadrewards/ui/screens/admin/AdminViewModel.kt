@@ -28,21 +28,38 @@ class AdminViewModel : ViewModel(), KoinComponent {
 
     fun fetchFlights() = viewModelScope.launch {
         _isLoading.value = true
-        _flights.value = NetworkUtils.performRequest(
-            request = { service.getFlights() }
+        NetworkUtils.performRequestPost(
+            request = { service.getFlights() },
+            onError = {
+                _showMessage.value = it
+            }
         )
         _isLoading.value = false
     }
 
     fun onUpdateFlightStatus(flight: Flight) = viewModelScope.launch {
         _isLoading.value = true
-        service.updateFlightStatus(
-            UpdateFlightStatus(flight.info.number, FlightStatus.SCHEDULE.status)
+        NetworkUtils.performRequestPost(
+            request = {
+                service.updateFlightStatus(
+                    UpdateFlightStatus(flight.info.number, FlightStatus.SCHEDULE.status)
+                )
+            },
+            onError = {
+                _showMessage.value = it
+            }
         )
         _isLoading.value = false
     }
 
     fun runRewardsProcess() = viewModelScope.launch {
-        service.runRewardsProcess()
+        _isLoading.value = true
+        NetworkUtils.performRequestPost(
+            request = { service.runRewardsProcess() },
+            onError = {
+                _showMessage.value = it
+            }
+        )
+        _isLoading.value = false
     }
 }

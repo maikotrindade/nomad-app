@@ -6,6 +6,7 @@ import io.github.maikotrindade.nomadrewards.model.CreateFlightRequest
 import io.github.maikotrindade.nomadrewards.model.Flight
 import io.github.maikotrindade.nomadrewards.network.ApiService
 import io.github.maikotrindade.nomadrewards.network.NetworkUtils
+import io.github.maikotrindade.nomadrewards.network.NetworkUtils.performRequestPost
 import io.github.maikotrindade.nomadrewards.ui.base.UserManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,8 +41,15 @@ class WelcomeViewModel : ViewModel(), KoinComponent {
     fun onBuyTicket(flight: Flight) = viewModelScope.launch {
         userManager.user.value?.email?.let { email ->
             _isLoading.value = true
-            service.createFlight(
-                CreateFlightRequest(flight.info.number, email)
+            performRequestPost(
+                request = {
+                    service.createFlight(
+                        CreateFlightRequest(flight.info.number, email)
+                    )
+                },
+                onError = {
+                    _showMessage.value = it
+                }
             )
             _isLoading.value = false
         }

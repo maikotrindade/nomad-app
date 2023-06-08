@@ -1,3 +1,8 @@
 package io.github.maikotrindade.nomadrewards.model
 
-data class CreateFlightRequest(val flightId: String, val email: String)
+import com.google.gson.annotations.SerializedName
+
+data class CreateFlightRequest(
+    @SerializedName("flightId") val flightId: String,
+    @SerializedName("email") val email: String
+)

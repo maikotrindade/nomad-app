@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -112,7 +113,53 @@ private fun TopContent(viewModel: AdminViewModel) {
                 onClick = { viewModel.runRewardsProcess() }
             ) {
                 Text(
-                    "Start →",
+                    "Start",
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Trigger Flight Status verifier",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 18.sp
+            )
+            Button(
+                modifier = Modifier.padding(start = 4.dp),
+                onClick = { viewModel.runRewardsProcess() }
+            ) {
+                Text(
+                    "Run",
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Force flights to ACTIVE",
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontSize = 18.sp
+            )
+            Button(
+                modifier = Modifier.padding(start = 4.dp),
+                onClick = { viewModel.runRewardsProcess() }
+            ) {
+                Text(
+                    "Run",
                     fontSize = 14.sp
                 )
             }
