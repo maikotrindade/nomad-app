@@ -7,7 +7,6 @@ import io.github.maikotrindade.nomadrewards.model.FlightStatus
 import io.github.maikotrindade.nomadrewards.model.UpdateFlightStatus
 import io.github.maikotrindade.nomadrewards.network.ApiService
 import io.github.maikotrindade.nomadrewards.network.NetworkUtils
-import io.github.maikotrindade.nomadrewards.ui.base.UserManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -17,40 +16,10 @@ import org.koin.core.component.inject
 class AdminViewModel : ViewModel(), KoinComponent {
 
     private val service: ApiService by inject()
-    private val userManager: UserManager by inject()
-
-    private val _flights = MutableStateFlow<List<Flight>?>(mutableListOf())
-    val flights = _flights.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
     private val _showMessage = MutableStateFlow<String?>(null)
-
-    fun fetchFlights() = viewModelScope.launch {
-        _isLoading.value = true
-        NetworkUtils.performRequestPost(
-            request = { service.getFlights() },
-            onError = {
-                _showMessage.value = it
-            }
-        )
-        _isLoading.value = false
-    }
-
-    fun onUpdateFlightStatus(flight: Flight) = viewModelScope.launch {
-        _isLoading.value = true
-        NetworkUtils.performRequestPost(
-            request = {
-                service.updateFlightStatus(
-                    UpdateFlightStatus(flight.info.number, FlightStatus.SCHEDULE.status)
-                )
-            },
-            onError = {
-                _showMessage.value = it
-            }
-        )
-        _isLoading.value = false
-    }
 
     fun runForceFlightStatusActive() {
         viewModelScope.launch {

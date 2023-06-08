@@ -2,9 +2,11 @@ package io.github.maikotrindade.nomadrewards.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.User
+import io.github.maikotrindade.nomadrewards.ui.base.ComposeUtils
 
 @Composable
 fun ProfileScreen(
@@ -39,9 +42,22 @@ fun ProfileScreen(
         message?.let { showMessage(it) }
     }
 
-    val user by viewModel.user.collectAsState()
-    user?.let {
-        UserPage(it, viewModel)
+    val isLoading by viewModel.isLoading.collectAsState()
+    Column(Modifier.fillMaxSize()) {
+        if (!isLoading) {
+            val user by viewModel.user.collectAsState()
+            user?.let {
+                UserPage(it, viewModel)
+            }
+        } else {
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                ComposeUtils.LoadingAnimation()
+            }
+        }
     }
 }
 
@@ -81,7 +97,9 @@ private fun UserPage(user: User, viewModel: ProfileViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f).padding(end = 8.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
                 text = "Private Key: " + user.privateKey.orEmpty(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp,
@@ -107,7 +125,9 @@ private fun UserPage(user: User, viewModel: ProfileViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f).padding(end = 8.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
                 text = "Address (3therSc@n): " + user.address.orEmpty(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 18.sp,
