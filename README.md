@@ -1,5 +1,6 @@
 # Nomad App
 Android app for `NomadBadge` smart contract - Chainlink hackathon spring 2023
+
 Google Play: [Nomad Rewards App](https://play.google.com/store/apps/details?id=io.github.maikotrindade.nomadrewards)
 
 ### Architecture
