@@ -27,11 +27,11 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import io.github.maikotrindade.nomadrewards.BuildConfig
 import io.github.maikotrindade.nomadrewards.R
 import io.github.maikotrindade.nomadrewards.model.toModel
 import io.github.maikotrindade.nomadrewards.network.ApiService
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -120,7 +120,7 @@ open class AuthenticationUI : ComponentActivity(), KoinComponent {
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Nomad", color = colorScheme.onPrimary)
+            Text(text = "Nomad v" + BuildConfig.VERSION_NAME, color = colorScheme.onPrimary)
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = { if (user == null) signIn() else signOut() }
