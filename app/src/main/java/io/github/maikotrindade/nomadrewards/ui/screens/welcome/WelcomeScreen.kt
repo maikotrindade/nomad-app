@@ -171,22 +171,6 @@ private fun FlightsList(flights: List<Flight>, viewModel: WelcomeViewModel) {
                     )
                 }
                 Row(
-                    modifier = Modifier
-                        .padding(top = 20.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Status",
-                        color = colorScheme.onPrimary
-                    )
-                    Text(
-                        text = flight.flightStatus,
-                        color = colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -209,6 +193,32 @@ private fun FlightsList(flights: List<Flight>, viewModel: WelcomeViewModel) {
                     )
                     Text(
                         text = flight.departure.scheduled.formatFlightDate(),
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Terminal",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.departure.terminal ?: "---",
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Gate",
+                        color = colorScheme.onPrimary
+                    )
+                    Text(
+                        text = flight.departure.gate ?: "---",
                         color = colorScheme.onPrimary
                     )
                 }
