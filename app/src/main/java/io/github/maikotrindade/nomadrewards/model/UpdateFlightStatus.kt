@@ -8,6 +8,7 @@ enum class FlightStatus(val status: Int) {
     LANDED(2),
     CANCELLED(3),
     INCIDENT(4),
-    DIVERTED(5)
+    DIVERTED(5),
+    REWARDED(6)
 }
 
