@@ -52,36 +52,42 @@ class AdminViewModel : ViewModel(), KoinComponent {
         _isLoading.value = false
     }
 
-    fun runForceFlightStatusActive() = viewModelScope.launch {
-        _isLoading.value = true
-        NetworkUtils.performRequestPost(
-            request = { service.runForceFlightStatusActive() },
-            onError = {
-                _showMessage.value = it
-            }
-        )
-        _isLoading.value = false
+    fun runForceFlightStatusActive() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            NetworkUtils.performRequestPost(
+                request = { service.runForceFlightStatusActive() },
+                onError = {
+                    _showMessage.value = it
+                }
+            )
+            _isLoading.value = false
+        }
     }
 
-    fun runFlightStatusViaAPI() = viewModelScope.launch {
-        _isLoading.value = true
-        NetworkUtils.performRequestPost(
-            request = { service.runFlightStatusViaAPI() },
-            onError = {
-                _showMessage.value = it
-            }
-        )
-        _isLoading.value = false
+    fun runFlightStatusViaAPI() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            NetworkUtils.performRequestPost(
+                request = { service.runFlightStatusViaAPI() },
+                onError = {
+                    _showMessage.value = it
+                }
+            )
+            _isLoading.value = false
+        }
     }
 
-    fun runRewardsProcess() = viewModelScope.launch {
-        _isLoading.value = true
-        NetworkUtils.performRequestPost(
-            request = { service.runRewardsProcess() },
-            onError = {
-                _showMessage.value = it
-            }
-        )
-        _isLoading.value = false
+    fun runRewardsProcess() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            NetworkUtils.performRequestPost(
+                request = { service.runRewardsProcess() },
+                onError = {
+                    _showMessage.value = it
+                }
+            )
+            _isLoading.value = false
+        }
     }
 }
